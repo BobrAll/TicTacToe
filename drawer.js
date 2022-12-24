@@ -53,11 +53,30 @@ class TicTacToe {
 
         return zones;
     }
-    checkWinner() {
+    checkMarkForWin(mark) {
+        //check user with crosses
         for (let i = 0; i < this.cells; i++) {
             for (let j = 0; j < this.cells; j++) {
-                
+                if (this.zones[i][j].mark != mark) break;
+                if (j == this.cells - 1) return true;
             }
+        }
+        
+        for (let i = 0; i < this.cells; i++) {
+            for (let j = 0; j < this.cells; j++) {
+                if (this.zones[j][i].mark != mark) break;
+                if (j == this.cells - 1) return true;
+            }
+        }
+
+        for (let i = 0; i < this.cells; i++) {
+            if (this.zones[i][i].mark != mark) break;
+                if (i == this.cells - 1) return true;
+        }
+
+        for (let i = 0; i < this.cells; i++) {
+            if (this.zones[i][this.cells - i - 1].mark != mark) break;
+                if (i == this.cells - 1) return true;
         }
     }
     drawGrid() {
@@ -127,7 +146,10 @@ game.canvas.addEventListener("mousedown", function(event){
             zone.mark = "circle";
         }
 
-        game.checkWinner();
+        if (game.checkMarkForWin("cross")) game.winner = "first";
+        if (game.checkMarkForWin("circle")) game.winner = "second";
+        
+        console.log(game.winner);
         game.isUserOneTurn = !game.isUserOneTurn;
     }
 });
