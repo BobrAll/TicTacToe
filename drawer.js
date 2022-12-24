@@ -21,14 +21,14 @@ class Zone {
     }
 }
 class TicTacToe {
-    constructor() {
+    constructor(cells) {
         this.canvas = document.getElementById("TicTacToe");
         this.context = this.canvas.getContext("2d");
         
         this.isUserOneTurn = true;
         this.winner = undefined;
 
-        this.cells = 3;
+        this.cells = cells;
         this.zones = this.createZones();
         
         this.drawGrid();
@@ -68,7 +68,7 @@ class TicTacToe {
             for (let j = 0; j < this.cells; j++) {
                 if (this.zones[j][i].mark != mark) break;
                 if (j == this.cells - 1) {
-                    this.drawWinnerLine(this.zones[0][i], this.zones[i][j]);
+                    this.drawWinnerLine(this.zones[0][i], this.zones[j][i]);
                     return true;
                 }
             }
@@ -93,6 +93,8 @@ class TicTacToe {
     drawGrid() {
         this.context.lineWidth = 3;
         this.context.strokeStyle = "black";
+
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.beginPath();
 
         //vertical lines
@@ -146,7 +148,8 @@ class TicTacToe {
     }
 }
 
-let game = new TicTacToe();
+let game = new TicTacToe(3);
+let range = document.getElementById("cells");
 
 game.canvas.addEventListener("mousedown", function(event){
     event.preventDefault();
@@ -168,4 +171,8 @@ game.canvas.addEventListener("mousedown", function(event){
         console.log(game.winner);
         game.isUserOneTurn = !game.isUserOneTurn;
     }
+});
+
+range.addEventListener("change", function(){
+    game = new TicTacToe(range.value);
 });
