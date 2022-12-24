@@ -34,27 +34,29 @@ class TicTacToe {
         this.drawGrid();
     }
     getHittedZone(point) {
-        for (let i = 0; i < this.zones.length; i++) {
-            if (this.zones[i].isHit(point)) return this.zones[i];
+        for (let i = 0; i < this.cells; i++) {
+            for (let j = 0; j < this.cells; j++) {
+                if (this.zones[i][j].isHit(point)) return this.zones[i][j];
+            }   
         }
     }
     createZones() {
-        let zones = [];
         let cell_width = this.canvas.width / this.cells;
         let cell_height = this.canvas.height / this.cells;
-        
-        for (let i = 0; i < this.cells; i++) {
-            for (let j = 0; j < this.cells; j++) {
-                zones.push(new Zone(cell_width * j, cell_height * i, cell_width * (j + 1), cell_height * (i + 1)));
-            }   
-        }
+
+        let zones = new Array(this.cells);
+        for (let i = 0; i < this.cells; i++) zones[i] = new Array(this.cells);
+
+        for (let i = 0; i < this.cells; i++)
+            for (let j = 0; j < this.cells; j++)
+                zones[i][j] = new Zone(cell_width * j, cell_height * i, cell_width * (j + 1), cell_height * (i + 1));
 
         return zones;
     }
     checkWinner() {
         for (let i = 0; i < this.cells; i++) {
             for (let j = 0; j < this.cells; j++) {
-                //if 
+                
             }
         }
     }
