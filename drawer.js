@@ -54,33 +54,45 @@ class TicTacToe {
         return zones;
     }
     checkMarkForWin(mark) {
-        //check user with crosses
         for (let i = 0; i < this.cells; i++) {
             for (let j = 0; j < this.cells; j++) {
                 if (this.zones[i][j].mark != mark) break;
-                if (j == this.cells - 1) return true;
+                if (j == this.cells - 1) {
+                    this.drawWinnerLine(this.zones[i][0], this.zones[i][j]);
+                    return true;
+                }
             }
         }
         
         for (let i = 0; i < this.cells; i++) {
             for (let j = 0; j < this.cells; j++) {
                 if (this.zones[j][i].mark != mark) break;
-                if (j == this.cells - 1) return true;
+                if (j == this.cells - 1) {
+                    this.drawWinnerLine(this.zones[0][i], this.zones[i][j]);
+                    return true;
+                }
             }
         }
 
         for (let i = 0; i < this.cells; i++) {
             if (this.zones[i][i].mark != mark) break;
-                if (i == this.cells - 1) return true;
+                if (i == this.cells - 1) {
+                    this.drawWinnerLine(this.zones[0][0], this.zones[i][i]);
+                    return true;
+                }
         }
 
         for (let i = 0; i < this.cells; i++) {
             if (this.zones[i][this.cells - i - 1].mark != mark) break;
-                if (i == this.cells - 1) return true;
+                if (i == this.cells - 1) {
+                    this.drawWinnerLine(this.zones[i][0], this.zones[0][i]);
+                    return true;
+                }
         }
     }
     drawGrid() {
         this.context.lineWidth = 3;
+        this.context.strokeStyle = "black";
         this.context.beginPath();
 
         //vertical lines
@@ -103,6 +115,8 @@ class TicTacToe {
         let radius = zone.width / 2 - gap;
         
         this.context.lineWidth = 5;
+        this.context.strokeStyle = "black";
+
         this.context.beginPath();
         this.context.arc(zone.center.x, zone.center.y, radius, 0, Math.PI * 2);
         this.context.stroke();
@@ -112,6 +126,8 @@ class TicTacToe {
         let gap = zone.width / 100 * inner_gap_percent;
         
         this.context.lineWidth = 5;
+        this.context.strokeStyle = "black";
+
         this.context.beginPath();
         this.context.moveTo(zone.startPoint.x + gap, zone.startPoint.y + gap);
         this.context.lineTo(zone.endPoint.x - gap, zone.endPoint.y - gap);
@@ -119,14 +135,14 @@ class TicTacToe {
         this.context.lineTo(zone.endPoint.x - gap, zone.startPoint.y + gap);
         this.context.stroke();
     }
-    drawWinnerLine(lineType, startZone) {
+    drawWinnerLine(startZone, endZone) {
         this.context.lineWidth = 3;
         this.context.strokeStyle = "red";
         this.context.beginPath();
 
-        if (lineType == "row") {
-            //moveTo(zone)
-        }
+        this.context.moveTo(startZone.center.x, startZone.center.y);
+        this.context.lineTo(endZone.center.x, endZone.center.y);
+        this.context.stroke();
     }
 }
 
@@ -148,7 +164,7 @@ game.canvas.addEventListener("mousedown", function(event){
 
         if (game.checkMarkForWin("cross")) game.winner = "first";
         if (game.checkMarkForWin("circle")) game.winner = "second";
-        
+
         console.log(game.winner);
         game.isUserOneTurn = !game.isUserOneTurn;
     }
